@@ -1,0 +1,166 @@
+camper: /project$ psql --usernamefreecodecamp --dbname=postgres
+psql: unrecognized option '--usernamefreecodecamp'
+Try "psql --help" for more information.
+camper: /project$ psql --usernamefreecode --dename=psotgres
+psql: unrecognized option '--usernamefreecode'
+Try "psql --help" for more information.
+camper: /project$ ^C
+camper: /project$ ^C
+camper: /project$ psql --username=postgres --dbname=worldcuptes
+psql: error: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "worldcuptes" does not exist
+camper: /project$ psql --username=freecodecamp --dbname=postgres
+psql (12.17 (Ubuntu 12.17-1.pgdg22.04+1))
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+Type "help" for help.
+
+postgres=> CREATE DATABASE worldcup;
+CREATE DATABASE
+postgres=> \c worldcup
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+You are now connected to database "worldcup" as user "freecodecamp".
+worldcup=> CREATE TABLE teams();
+CREATE TABLE
+worldcup=> ALTER TABLE teams ADD COLUMN team_id PRIMARY KEY;
+ERROR:  syntax error at or near "PRIMARY"
+LINE 1: ALTER TABLE teams ADD COLUMN team_id PRIMARY KEY;
+                                             ^
+worldcup=> ALTER TABLE teams ADD COLUMN team_id SERIAL PRIMARY KEY;
+ALTER TABLE
+worldcup=> ALTER TABLE teams ADD COLUMN team_id VARCHAR(255) UNIQUE ;
+ERROR:  column "team_id" of relation "teams" already exists
+worldcup=> ALTER TABLE teams ADD COLUMN teams VARCHAR(255) UNIQUE ;
+ALTER TABLE
+worldcup=> CREATE TABLE games();
+CREATE TABLE
+worldcup=> ALTER TABLE games ADD COLUMN game_id SERIAL PRIMARY KEY;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN year INT;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN round VACHAR(255);;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN winner_id INT NOT NULL;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN opponent_id INT NOT NULL;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN winner_goals \INT NOT NULL;
+invalid command \INT
+Try \? for help.
+worldcup-> ALTER TABLE games ADD COLUMN winner_goals INT NOT NULL;
+ERROR:  syntax error at or near "TABLE"
+LINE 2: ALTER TABLE games ADD COLUMN winner_goals INT NOT NULL;
+              ^
+worldcup=> ALTER TABLE games ADD COLUMN winner_goals INT NOT NULL;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN opponent_goals INT NOT NULL;
+ALTER TABLE
+worldcup=> \d games
+                                          Table "public.games"
+     Column     |          Type          | Collation | Nullable |                Default                 
+----------------+------------------------+-----------+----------+----------------------------------------
+ game_id        | integer                |           | not null | nextval('games_game_id_seq'::regclass)
+ year           | integer                |           |          | 
+ round          | character varying(255) |           |          | 
+ winner_id      | integer                |           | not null | 
+ opponent_id    | integer                |           | not null | 
+ winner_goals   | integer                |           | not null | 
+ opponent_goals | integer                |           | not null | 
+Indexes:
+    "games_pkey" PRIMARY KEY, btree (game_id)
+
+worldcup=> ALTER TABLE games DROP COLUMN year;
+ALTER TABLE
+worldcup=> ALTER TABLE games DROP COLUMN round;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN year INT NOT NULL;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD COLUMN round INT NOT NULL;
+ALTER TABLE
+worldcup=> \d games
+                                   Table "public.games"
+     Column     |  Type   | Collation | Nullable |                Default                 
+----------------+---------+-----------+----------+----------------------------------------
+ game_id        | integer |           | not null | nextval('games_game_id_seq'::regclass)
+ winner_id      | integer |           | not null | 
+ opponent_id    | integer |           | not null | 
+ winner_goals   | integer |           | not null | 
+ opponent_goals | integer |           | not null | 
+ year           | integer |           | not null | 
+ round          | integer |           | not null | 
+Indexes:
+    "games_pkey" PRIMARY KEY, btree (game_id)
+
+worldcup=> ALTER TABLE games ADD CONSTRAINT fk_games_teams FOREIGN KEY (WINNER_id) REFERENCES teams (team_id);
+ALTER TABLE
+worldcup=> ALTER TABLE games RENAME CONSTRAINT fk_games_teams TO fk_games_winner
+worldcup-> 
+worldcup=> ALTER TABLE games RENAME CONSTRAINT fk_games_teams TO fk_games_winner;
+ALTER TABLE
+worldcup=> ALTER TABLE games ADD CONSTRAINT fk_games_opponent FOREIGN KEY (OPPONENT_id) REFERENCES teams (team_id);
+ALTER TABLE
+worldcup=> \d games;
+                                   Table "public.games"
+     Column     |  Type   | Collation | Nullable |                Default                 
+----------------+---------+-----------+----------+----------------------------------------
+ game_id        | integer |           | not null | nextval('games_game_id_seq'::regclass)
+ winner_id      | integer |           | not null | 
+ opponent_id    | integer |           | not null | 
+ winner_goals   | integer |           | not null | 
+ opponent_goals | integer |           | not null | 
+ year           | integer |           | not null | 
+ round          | integer |           | not null | 
+Indexes:
+    "games_pkey" PRIMARY KEY, btree (game_id)
+Foreign-key constraints:
+    "fk_games_opponent" FOREIGN KEY (opponent_id) REFERENCES teams(team_id)
+    "fk_games_winner" FOREIGN KEY (winner_id) REFERENCES teams(team_id)
+
+worldcup=> \d games
+                                   Table "public.games"
+     Column     |  Type   | Collation | Nullable |                Default                 
+----------------+---------+-----------+----------+----------------------------------------
+ game_id        | integer |           | not null | nextval('games_game_id_seq'::regclass)
+ winner_id      | integer |           | not null | 
+ opponent_id    | integer |           | not null | 
+ winner_goals   | integer |           | not null | 
+ opponent_goals | integer |           | not null | 
+ year           | integer |           | not null | 
+ round          | integer |           | not null | 
+Indexes:
+    "games_pkey" PRIMARY KEY, btree (game_id)
+Foreign-key constraints:
+    "fk_games_opponent" FOREIGN KEY (opponent_id) REFERENCES teams(team_id)
+    "fk_games_winner" FOREIGN KEY (winner_id) REFERENCES teams(team_id)
+
+worldcup=> \d games
+                                   Table "public.games"
+     Column     |  Type   | Collation | Nullable |                Default                 
+----------------+---------+-----------+----------+----------------------------------------
+ game_id        | integer |           | not null | nextval('games_game_id_seq'::regclass)
+ winner_id      | integer |           | not null | 
+ opponent_id    | integer |           | not null | 
+ winner_goals   | integer |           | not null | 
+ opponent_goals | integer |           | not null | 
+ year           | integer |           | not null | 
+ round          | integer |           | not null | 
+Indexes:
+    "games_pkey" PRIMARY KEY, btree (game_id)
+Foreign-key constraints:
+    "fk_games_opponent" FOREIGN KEY (opponent_id) REFERENCES teams(team_id)
+    "fk_games_winner" FOREIGN KEY (winner_id) REFERENCES teams(team_id)
+
+worldcup=> \d
+                  List of relations
+ Schema |       Name        |   Type   |    Owner     
+--------+-------------------+----------+--------------
+ public | games             | table    | freecodecamp
+ public | games_game_id_seq | sequence | freecodecamp
+ public | teams             | table    | freecodecamp
+ public | teams_team_id_seq | sequence | freecodecamp
+(4 rows)
+
+worldcup=> SELECT * FROM teams;
+ team_id | teams 
+---------+-------
+(0 rows)
+
+worldcup=> 
